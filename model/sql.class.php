@@ -9,23 +9,12 @@ class Sql extends PDO{
         $this->conn = new PDO("mysql:host=localhost; dbname=teste_PDO","root","");
     }
     
-    public function setParams($statment, $params = array()){
-        
-         //foreach pra rodar dentro do array de paramentros da query.
-        foreach($params as $key => $value){
+    public function select($rowQuery, $params = array()){
             
-            //Bindparam é usado pra ligar a chave ao paramentro. Dentro de um foreach serve pra deixar os parametros da query dinamico
-            $this->setParam($key,$value);
-        
-        }
+            $stmt = $this->query($rowQuery, $params);
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-        
-        
-    private function setParam($statment , $key, $value){
-            
-            $statment->bindParam($key, $value);
-        }
-    
     
     public function query($rowQuery, $params = array()){
         
@@ -37,14 +26,25 @@ class Sql extends PDO{
         $stmt->execute();
         return $stmt;
         
-        }
+    }   
+    
+    
+    public function setParams($statement, $params = array()){
         
-        public function select($rowQuery, $params = array()){
+         //foreach pra rodar dentro do array de paramentros da query.
+        foreach($params as $key => $value){
             
-            $stmt = $this->query($rowQuery, $params);
-            
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            //Bindparam é usado pra ligar a chave ao paramentro. Dentro de um foreach serve pra deixar os parametros da query dinamico
+            $this->setParam($statement,$key,$value);
+        
         }
+    }
+        
+        
+    private function setParam($statement , $key, $value){
+            
+            $statement->bindParam($key, $value);
+    } 
         
    
     
